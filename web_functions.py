@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import streamlit as st
 
-@st.cache()
+@st.cache_data
 def load_data():
     iris = pd.read_csv('iris.csv')
     
@@ -14,7 +14,7 @@ def load_data():
     
     return iris, X,y
 
-@st.cache()
+@st.cache_data
 def train_model(X,y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
     
@@ -32,7 +32,7 @@ def train_model(X,y):
     return tree_model,acc_secore
     
 
-@st.cache()
+@st.cache_data
 def predict(x,y,features):
     tree_model,acc_score = train_model(x,y)
     

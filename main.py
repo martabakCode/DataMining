@@ -1,7 +1,7 @@
 #import library yang dibutuhkan
 
 import streamlit as st
-from web_function import load_data
+from web_functions import load_data
 
 from Tabs import home, predict, visualise
 

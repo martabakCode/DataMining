@@ -1,6 +1,6 @@
 import streamlit as st
 
-from web_function import predict
+from web_functions import predict
 
 def app(df, x, y):
     # Judul Halaman Aplikasi
