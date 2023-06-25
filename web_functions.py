@@ -7,7 +7,7 @@ import streamlit as st
 
 @st.cache_data
 def load_data():
-    iris = pd.read_csv('iris.csv')
+    iris = pd.read_csv('app/datamining/iris.csv')
     
     X = iris[['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm' ]]
     y = iris['Species']
