@@ -86,7 +86,7 @@ if st.sidebar.button("Prediksi"):
         f_object.close()
 
 st.header("File Upload")
-uploaded_file = st.file_uploader("Choose a CSV file")
+uploaded_file = st.file_uploader("Choose a CSV file name : indeks-standar-pencemar-udara-di-spku-dataset.csv")
 if uploaded_file is not None:
     bytes_data = uploaded_file.getvalue()
     data = uploaded_file.getvalue().decode('utf-8').splitlines()         
