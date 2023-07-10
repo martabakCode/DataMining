@@ -35,7 +35,7 @@ sns.countplot(x="categori", data=df)
 st.title("Air Quality Index Jakarta")
 
 st.header("Tabel dataset (10 Data Teratas)")
-st.table(df.head(10))
+st.table(df.tail(10))
 st.subheader("Jumlah row dataset")
 st.info(df[df.columns[0]].count())
 st.subheader("Data Setiap Kategori")
