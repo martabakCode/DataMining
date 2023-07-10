@@ -20,3 +20,6 @@ def app(df, x, y):
             feature_names=x.columns, class_names=['Iris-setosa','Iris-versicolor','Iris-virginica']
         )
         st.graphviz_chart(dot_data)
+    elif st.checkbox("Pair Plot"):
+        fig = sns.pairplot(df, hue="Species")
+        st.pyplot(fig)

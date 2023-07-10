@@ -7,12 +7,27 @@ import streamlit as st
 
 @st.cache_data
 def load_data():
-    iris = pd.read_csv('iris.csv')
-    
-    X = iris[['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm' ]]
-    y = iris['Species']
-    
-    return iris, X,y
+    #import the data and create the dataframe
+    df = pd.read_csv("indeks-standar-pencemar-udara-di-spku-dataset.csv")
+    #remove all the spaces from the column names
+    df.columns = list(map(lambda a: a.lstrip(), df.columns))
+    #drop useless values
+    df.drop(["tanggal"],axis=1,inplace=True)
+    df.drop(["stasiun"],axis=1,inplace=True)
+    pd.set_option("display.max_columns", None)
+    df = df[df.pm10 != "---"]
+    df = df[df.so2 != "---"]
+    df = df[df.o3 != "---"]
+    df = df[df.co != "---"]
+    df = df[df.no2 != "---"]
+    df = df[df.critical != "---"]
+    df = df[df.categori != "---"]
+    df.dropna(subset = ["critical"], inplace=True)
+    df.dropna(subset = ["max"], inplace=True)
+    df= df[df['max'] != 0]
+    X = df[['pm10', 'so2', 'co', 'o3','no2' ]]
+    y = df['categori']
+    return df, X,y
 
 @st.cache_data
 def train_model(X,y):
