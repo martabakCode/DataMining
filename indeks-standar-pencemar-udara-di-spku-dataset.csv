@@ -1829,3 +1829,6 @@ tanggal,stasiun,pm10,so2,co,o3,no2,max,critical,categori
 2020-12-29,DKI5 (Kebon Jeruk) Jakarta Barat,15,28,4,27,---,28,PM25,BAIK
 2020-12-30,DKI5 (Kebon Jeruk) Jakarta Barat,16,7,3,21,2,21,CO,BAIK
 2020-12-31,DKI5 (Kebon Jeruk) Jakarta Barat,18,13,6,24,3,24,CO,BAIK
+2020-12-31,DKI5 (Kebon Jeruk) Jakarta Barat,30,20,10,32,9,32,O3,BAIK
+2020-12-31,DKI5 (Kebon Jeruk) Jakarta Barat,27,22,12,29,8,29,O3,BAIK
+2020-12-31,DKI5 (Kebon Jeruk) Jakarta Barat,39,22,14,32,10,39,PM10,BAIK

@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import streamlit as st
 
-@st.cache_data
 def load_data():
     #import the data and create the dataframe
     df = pd.read_csv("indeks-standar-pencemar-udara-di-spku-dataset.csv")
@@ -29,7 +28,6 @@ def load_data():
     y = df['categori']
     return df, X,y
 
-@st.cache_data
 def train_model(X,y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
     
@@ -47,7 +45,6 @@ def train_model(X,y):
     return tree_model,acc_secore
     
 
-@st.cache_data
 def predict(x,y,features):
     tree_model,acc_score = train_model(x,y)
     
