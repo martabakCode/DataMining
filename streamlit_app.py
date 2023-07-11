@@ -94,7 +94,7 @@ features = [pm10,so2,co,o3,no2]
 #Tombol Prediksi
 button = st.sidebar.button("Prediksi")
 if button:
-    prediction, score = predict(x,y,features)
+    prediction, score = predict(x,y,number,features)
     score = score
     # Menampilkan hasil prediksi
     if(prediction == 'BAIK'):
@@ -104,17 +104,18 @@ if button:
     elif(prediction == 'TIDAK SEHAT'):
         st.sidebar.success("Index udara tidak baik")
     
+    maks = features.index(max(list(map(int, features))))
     #append to csv
-    features.append(str(max(list(map(int, features)))))
-    if features.index(str(max(list(map(int, features))))) == 0:
+    features.append(max(list(map(int, features))))
+    if maks == 0:
         features.append('PM10')
-    elif features.index(str(max(list(map(int, features))))) == 1:
+    elif maks == 1:
         features.append('SO2')
-    elif features.index(str(max(list(map(int, features))))) == 2:
+    elif maks == 2:
         features.append('CO')
-    elif features.index(str(max(list(map(int, features))))) == 3:
+    elif maks == 3:
         features.append('O3')
-    elif features.index(str(max(list(map(int, features))))) == 4:
+    elif maks == 4:
         features.append('NO2')
     features.insert(0, 'DKI5 (Kebon Jeruk) Jakarta Barat')
     features.insert(0, '2020-12-31')

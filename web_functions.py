@@ -32,7 +32,7 @@ def train_model(X,y,z):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=z, random_state=123)
     # membuat model Decision Tree
     tree_model = DecisionTreeClassifier()
-    
+
     # melakukan pelatihan model terhadap data
     tree_model = tree_model.fit(X_train, y_train)
     
@@ -47,8 +47,8 @@ def train_model(X,y,z):
     return tree_model,acc_secore,data,data1
     
 
-def predict(x,y,features):
-    tree_model,acc_score = train_model(x,y)
+def predict(x,y,z,features):
+    tree_model,acc_score,data,data1 = train_model(x,y,z)
     
     predict = tree_model.predict(np.array(features).reshape(1,-1))
     
