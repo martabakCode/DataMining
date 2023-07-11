@@ -12,71 +12,6 @@ from web_functions import load_data
 from web_functions import predict
 from web_functions import train_model
 
-
-
-#membuat sidebar
-st.sidebar.title("Air Quality Index")
-
-# Inputan untuk sidebar
-pm10 = st.sidebar.number_input('Input Kadar PM10 (Partikulat udara) : ',min_value=1)
-so2 = st.sidebar.number_input('Input Kadar SO2 (Sulfur dioksida) : ',min_value=1)
-co = st.sidebar.number_input('Input Kadar CO (Karbon monoksida) : ',min_value=1)
-o3 = st.sidebar.number_input('Input Kadar O3 (Trioksigen/Ozon): ',min_value=1)
-no2 = st.sidebar.number_input('Input Kadar NO2 (Oksida nitrogen) : ',min_value=1)
-
-#Tombol Prediksi
-button = st.sidebar.button("Prediksi")
-if button:
-    if pm10 == "":
-        st.sidebar.error("Salah menginputkan PM 10")
-    elif so2 == "":
-        st.sidebar.error("Salah menginputkan SO2")
-    elif co == "":
-        st.sidebar.error("Salah menginputkan CO")
-    elif o3 == "":
-        st.sidebar.error("Salah menginputkan O3")
-    elif no2 == "":
-        st.sidebar.error("Salah menginputkan NO2")
-    else:
-        prediction, score = predict(x,y,features)
-        score = score
-        if(prediction == 'BAIK'):
-            st.sidebar.success("Index udara baik")
-        elif(prediction == 'SEDANG'):
-            st.sidebar.success("Index udara sedang")
-        elif(prediction == 'TIDAK SEHAT'):
-            st.sidebar.success("Index udara tidak baik")
-        
-        #append to csv
-        features.append(str(max(list(map(int, features)))))
-        if features.index(str(max(list(map(int, features))))) == 0:
-            features.append('PM10')
-        elif features.index(str(max(list(map(int, features))))) == 1:
-            features.append('SO2')
-        elif features.index(str(max(list(map(int, features))))) == 2:
-            features.append('CO')
-        elif features.index(str(max(list(map(int, features))))) == 3:
-            features.append('O3')
-        elif features.index(str(max(list(map(int, features))))) == 4:
-            features.append('NO2')
-        features.insert(0, 'DKI5 (Kebon Jeruk) Jakarta Barat')
-        features.insert(0, '2020-12-31')
-        features.append(prediction[0])
-        with open('indeks-standar-pencemar-udara-di-spku-dataset.csv', 'a') as f_object:
-            # Pass this file object to csv.writer()
-            # and get a writer object
-            writer_object = writer(f_object)
-        
-            # Pass the list as an argument into
-            # the writerow()
-            writer_object.writerow(features)
-        
-            # Close the file object
-            f_object.close()
-
-#memasukan inputan ke array features
-features = [pm10,so2,co,o3,no2]
-
 # memanggil dataset
 df,x,y = load_data()
 
@@ -142,3 +77,61 @@ def upload():
         destination_file.close()
         st.session_state["upload_state"] = "Saved " + complete_name + " successfully!"
 st.button("Upload file to Sandbox", on_click=upload)
+
+#membuat sidebar title
+st.sidebar.title("Air Quality Index")
+
+# Inputan untuk sidebar
+pm10 = st.sidebar.number_input('Input Kadar PM10 (Partikulat udara) : ',min_value=1)
+so2 = st.sidebar.number_input('Input Kadar SO2 (Sulfur dioksida) : ',min_value=1)
+co = st.sidebar.number_input('Input Kadar CO (Karbon monoksida) : ',min_value=1)
+o3 = st.sidebar.number_input('Input Kadar O3 (Trioksigen/Ozon): ',min_value=1)
+no2 = st.sidebar.number_input('Input Kadar NO2 (Oksida nitrogen) : ',min_value=1)
+
+#memasukan inputan ke array features
+features = [pm10,so2,co,o3,no2]
+
+#Tombol Prediksi
+button = st.sidebar.button("Prediksi")
+if button:
+    prediction, score = predict(x,y,features)
+    score = score
+    # Menampilkan hasil prediksi
+    if(prediction == 'BAIK'):
+        st.sidebar.success("Index udara baik")
+    elif(prediction == 'SEDANG'):
+        st.sidebar.success("Index udara sedang")
+    elif(prediction == 'TIDAK SEHAT'):
+        st.sidebar.success("Index udara tidak baik")
+    
+    #append to csv
+    features.append(str(max(list(map(int, features)))))
+    if features.index(str(max(list(map(int, features))))) == 0:
+        features.append('PM10')
+    elif features.index(str(max(list(map(int, features))))) == 1:
+        features.append('SO2')
+    elif features.index(str(max(list(map(int, features))))) == 2:
+        features.append('CO')
+    elif features.index(str(max(list(map(int, features))))) == 3:
+        features.append('O3')
+    elif features.index(str(max(list(map(int, features))))) == 4:
+        features.append('NO2')
+    features.insert(0, 'DKI5 (Kebon Jeruk) Jakarta Barat')
+    features.insert(0, '2020-12-31')
+    features.append(prediction[0])
+    with open('indeks-standar-pencemar-udara-di-spku-dataset.csv', 'a') as f_object:
+        # Pass this file object to csv.writer()
+        # and get a writer object
+        writer_object = writer(f_object)
+    
+        # Pass the list as an argument into
+        # the writerow()
+        writer_object.writerow(features)
+    
+        # Close the file object
+        f_object.close()
+
+
+
+
+

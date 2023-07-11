@@ -29,12 +29,10 @@ def load_data():
     return df, X,y
 
 def train_model(X,y,z):
-
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=z, random_state=123)
-    
     # membuat model Decision Tree
     tree_model = DecisionTreeClassifier()
-
+    
     # melakukan pelatihan model terhadap data
     tree_model = tree_model.fit(X_train, y_train)
     
