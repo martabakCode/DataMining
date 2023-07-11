@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pathlib
 import os.path
+import pandas as pd
 from sklearn import tree
 from csv import writer
 from web_functions import load_data
@@ -20,6 +21,7 @@ st.sidebar.title("Air Quality Index")
 
 
 pm10 = st.sidebar.text_input('Input Kadar PM10 (Partikulat udara) : ')
+
 so2 = st.sidebar.text_input('Input Kadar SO2 (Sulfur dioksida) : ')
 co = st.sidebar.text_input('Input Kadar CO (Karbon monoksida) : ')
 o3 = st.sidebar.text_input('Input Kadar O3 (Trioksigen/Ozon): ')
@@ -33,9 +35,19 @@ fig = plt.figure(figsize=(10, 4))
 sns.countplot(x="categori", data=df)
 
 st.title("Air Quality Index Jakarta")
+first_row = df.head(10)
+last_row = df.tail(10)
+result = pd.concat([first_row,last_row])
+# result = result.set_index()
 
-st.header("Tabel dataset (10 Data Teratas)")
-st.table(df.tail(10))
+# result.insert(0,"ID",range(1,len(result)+1))
+
+# result = result.reset_index(drop=True)
+# result = result.drop(columns=["Unamed: 0"],axis=1,errors='ignore')
+# result = result.to_string(index=False)
+
+st.header("Tabel dataset (10 Data Teratas&Terbawah)")
+st.table(result)
 st.subheader("Jumlah row dataset")
 st.info(df[df.columns[0]].count())
 st.subheader("Data Setiap Kategori")
@@ -48,43 +60,54 @@ dot_data = tree.export_graphviz(
 )
 st.graphviz_chart(dot_data)
 #Tombol Prediksi
-if st.sidebar.button("Prediksi"):
-    prediction, score = predict(x,y,features)
-    score = score
-    if(prediction == 'BAIK'):
-        st.sidebar.success("Index udara baik")
-    elif(prediction == 'SEDANG'):
-        st.sidebar.success("Index udara sedang")
-    elif(prediction == 'TIDAK SEHAT'):
-        st.sidebar.success("Index udara tidak baik")
-    
-    #append to csv
-    features.append(str(max(list(map(int, features)))))
-    if features.index(str(max(list(map(int, features))))) == 0:
-        features.append('PM10')
-    elif features.index(str(max(list(map(int, features))))) == 1:
-        features.append('SO2')
-    elif features.index(str(max(list(map(int, features))))) == 2:
-        features.append('CO')
-    elif features.index(str(max(list(map(int, features))))) == 3:
-        features.append('O3')
-    elif features.index(str(max(list(map(int, features))))) == 4:
-        features.append('NO2')
-    features.insert(0, 'DKI5 (Kebon Jeruk) Jakarta Barat')
-    features.insert(0, '2020-12-31')
-    features.append(prediction[0])
-    with open('indeks-standar-pencemar-udara-di-spku-dataset.csv', 'a') as f_object:
-        # Pass this file object to csv.writer()
-        # and get a writer object
-        writer_object = writer(f_object)
-    
-        # Pass the list as an argument into
-        # the writerow()
-        writer_object.writerow(features)
-    
-        # Close the file object
-        f_object.close()
-
+button = st.sidebar.button("Prediksi")
+if button:
+    if pm10 == "":
+        st.sidebar.error("Index PM 10 Kosong")
+    elif so2 == "":
+        st.sidebar.error("Index SO2 Kosong")
+    elif co == "":
+        st.sidebar.error("Index CO Kosong")
+    elif o3 == "":
+        st.sidebar.error("Index O3 Kosong")
+    elif no2 == "":
+        st.sidebar.error("Index NO2 Kosong")
+    else:
+        prediction, score = predict(x,y,features)
+        score = score
+        if(prediction == 'BAIK'):
+            st.sidebar.success("Index udara baik")
+        elif(prediction == 'SEDANG'):
+            st.sidebar.success("Index udara sedang")
+        elif(prediction == 'TIDAK SEHAT'):
+            st.sidebar.success("Index udara tidak baik")
+        
+        #append to csv
+        features.append(str(max(list(map(int, features)))))
+        if features.index(str(max(list(map(int, features))))) == 0:
+            features.append('PM10')
+        elif features.index(str(max(list(map(int, features))))) == 1:
+            features.append('SO2')
+        elif features.index(str(max(list(map(int, features))))) == 2:
+            features.append('CO')
+        elif features.index(str(max(list(map(int, features))))) == 3:
+            features.append('O3')
+        elif features.index(str(max(list(map(int, features))))) == 4:
+            features.append('NO2')
+        features.insert(0, 'DKI5 (Kebon Jeruk) Jakarta Barat')
+        features.insert(0, '2020-12-31')
+        features.append(prediction[0])
+        with open('indeks-standar-pencemar-udara-di-spku-dataset.csv', 'a') as f_object:
+            # Pass this file object to csv.writer()
+            # and get a writer object
+            writer_object = writer(f_object)
+        
+            # Pass the list as an argument into
+            # the writerow()
+            writer_object.writerow(features)
+        
+            # Close the file object
+            f_object.close()
 st.header("File Upload")
 uploaded_file = st.file_uploader("Choose a CSV file name : indeks-standar-pencemar-udara-di-spku-dataset.csv")
 if uploaded_file is not None:
