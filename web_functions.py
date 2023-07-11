@@ -28,8 +28,9 @@ def load_data():
     y = df['categori']
     return df, X,y
 
-def train_model(X,y):
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
+def train_model(X,y,z):
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=z, random_state=123)
     
     # membuat model Decision Tree
     tree_model = DecisionTreeClassifier()
@@ -41,8 +42,11 @@ def train_model(X,y):
 
     acc_secore = round(accuracy_score(y_pred, y_test), 3)
     
-    
-    return tree_model,acc_secore
+    data = X_test
+    data1= y_test
+
+    # data = pd.concat([data,data1])
+    return tree_model,acc_secore,data,data1
     
 
 def predict(x,y,features):

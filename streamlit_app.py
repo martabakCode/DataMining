@@ -17,61 +17,26 @@ from web_functions import train_model
 #membuat sidebar
 st.sidebar.title("Air Quality Index")
 
-#membuat radio option
+# Inputan untuk sidebar
+pm10 = st.sidebar.number_input('Input Kadar PM10 (Partikulat udara) : ',min_value=1)
+so2 = st.sidebar.number_input('Input Kadar SO2 (Sulfur dioksida) : ',min_value=1)
+co = st.sidebar.number_input('Input Kadar CO (Karbon monoksida) : ',min_value=1)
+o3 = st.sidebar.number_input('Input Kadar O3 (Trioksigen/Ozon): ',min_value=1)
+no2 = st.sidebar.number_input('Input Kadar NO2 (Oksida nitrogen) : ',min_value=1)
 
-
-pm10 = st.sidebar.text_input('Input Kadar PM10 (Partikulat udara) : ')
-
-so2 = st.sidebar.text_input('Input Kadar SO2 (Sulfur dioksida) : ')
-co = st.sidebar.text_input('Input Kadar CO (Karbon monoksida) : ')
-o3 = st.sidebar.text_input('Input Kadar O3 (Trioksigen/Ozon): ')
-no2 = st.sidebar.text_input('Input Kadar NO2 (Oksida nitrogen) : ')
-
-features = [pm10,so2,co,o3,no2]
-
-df,x,y = load_data()
-
-fig = plt.figure(figsize=(10, 4))
-sns.countplot(x="categori", data=df)
-
-st.title("Air Quality Index Jakarta")
-first_row = df.head(10)
-last_row = df.tail(10)
-result = pd.concat([first_row,last_row])
-# result = result.set_index()
-
-# result.insert(0,"ID",range(1,len(result)+1))
-
-# result = result.reset_index(drop=True)
-# result = result.drop(columns=["Unamed: 0"],axis=1,errors='ignore')
-# result = result.to_string(index=False)
-
-st.header("Tabel dataset (10 Data Teratas&Terbawah)")
-st.table(result)
-st.subheader("Jumlah row dataset")
-st.info(df[df.columns[0]].count())
-st.subheader("Data Setiap Kategori")
-st.pyplot(fig)
-st.subheader("Decision Tree")
-model,score = train_model(x,y)
-dot_data = tree.export_graphviz(
-    decision_tree=model, max_depth=3, out_file=None, filled=True, rounded=True,
-    feature_names=x.columns, class_names=['BAIK','SEDANG','TIDAK SEHAT']
-)
-st.graphviz_chart(dot_data)
 #Tombol Prediksi
 button = st.sidebar.button("Prediksi")
 if button:
     if pm10 == "":
-        st.sidebar.error("Index PM 10 Kosong")
+        st.sidebar.error("Salah menginputkan PM 10")
     elif so2 == "":
-        st.sidebar.error("Index SO2 Kosong")
+        st.sidebar.error("Salah menginputkan SO2")
     elif co == "":
-        st.sidebar.error("Index CO Kosong")
+        st.sidebar.error("Salah menginputkan CO")
     elif o3 == "":
-        st.sidebar.error("Index O3 Kosong")
+        st.sidebar.error("Salah menginputkan O3")
     elif no2 == "":
-        st.sidebar.error("Index NO2 Kosong")
+        st.sidebar.error("Salah menginputkan NO2")
     else:
         prediction, score = predict(x,y,features)
         score = score
@@ -108,6 +73,51 @@ if button:
         
             # Close the file object
             f_object.close()
+
+#memasukan inputan ke array features
+features = [pm10,so2,co,o3,no2]
+
+# memanggil dataset
+df,x,y = load_data()
+
+# Judul dari tab kanan
+st.title("Air Quality Index Jakarta")
+
+# Menampilkan 10 Data Teratas dan Terbawah
+first_row = df.head(10)
+last_row = df.tail(10)
+result = pd.concat([first_row,last_row])
+st.header("Tabel dataset (10 Data Teratas&Terbawah)")
+st.table(result)
+
+# Menampilkan Jumlahrow dataset
+st.subheader("Jumlah row dataset")
+st.info(df[df.columns[0]].count())
+
+# Menampilkan Data Setiap Kategori
+st.subheader("Data Setiap Kategori")
+fig = plt.figure(figsize=(10, 4))
+sns.countplot(x="categori", data=df)
+st.pyplot(fig)
+
+# Menampilkan Pengaturan Testing
+st.header("Pengaturan Testing")
+number = st.slider("Presentase data",1,100)
+if number > 0:
+    number =number/100
+    model,score,data,data1 = train_model(x,y,number)
+    st.subheader("Tabel Test")
+    st.table(pd.concat([data,data1],axis=1))
+
+# Decision Tree Show    
+st.subheader("Decision Tree")
+dot_data = tree.export_graphviz(
+    decision_tree=model, max_depth=3, out_file=None, filled=True, rounded=True,
+    feature_names=x.columns, class_names=['BAIK','SEDANG','TIDAK SEHAT']
+)
+st.graphviz_chart(dot_data)
+
+# File Upload
 st.header("File Upload")
 uploaded_file = st.file_uploader("Choose a CSV file name : indeks-standar-pencemar-udara-di-spku-dataset.csv")
 if uploaded_file is not None:
