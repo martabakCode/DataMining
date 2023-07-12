@@ -39,7 +39,7 @@ st.pyplot(fig)
 st.header("Pengaturan Testing")
 number = st.slider("Presentase data",1,100)
 if number > 0:
-    number =number/100
+    number = number/100
     model,score,data,data1 = train_model(x,y,number)
     st.subheader("Tabel Test")
     st.table(pd.concat([data,data1],axis=1))
@@ -131,8 +131,3 @@ if button:
     
         # Close the file object
         f_object.close()
-
-
-
-
-
