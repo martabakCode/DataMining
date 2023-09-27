@@ -106,7 +106,9 @@ if button:
     
     maks = features.index(max(list(map(int, features))))
     #append to csv
+    
     features.append(max(list(map(int, features))))
+    #52,23,29,24,12,52
     if maks == 0:
         features.append('PM10')
     elif maks == 1:
@@ -117,9 +119,15 @@ if button:
         features.append('O3')
     elif maks == 4:
         features.append('NO2')
+    #52,23,29,24,12,52,PM10
     features.insert(0, 'DKI5 (Kebon Jeruk) Jakarta Barat')
+    #DKI5 (Kebon Jeruk) Jakarta Barat,52,23,29,24,12,52,PM10
     features.insert(0, '2020-12-31')
+    #2020-01-09,DKI5 (Kebon Jeruk) Jakarta Barat,52,23,29,24,12,52,PM10
+    
+    
     features.append(prediction[0])
+    #2020-01-09,DKI1 (Bunderan HI),52,23,29,24,12,52,PM10,SEDANG
     with open('indeks-standar-pencemar-udara-di-spku-dataset.csv', 'a') as f_object:
         # Pass this file object to csv.writer()
         # and get a writer object
